@@ -1,6 +1,8 @@
 class Parser
   attr_accessor :token
 
+  OPERATIONS = %w(plus equal).freeze
+
   def initialize(text)
     @text = text
     @tokens = text.scan(/\(|\)|[\w\.\*]+/)
@@ -30,17 +32,18 @@ class Parser
     if @token.nil?
       results.last
     elsif @token == '('
-      result = expression
-      results << result
+      results << expression
       expression
     elsif @token == ')'
       last_token
-    elsif @token == 'plus'
-      Plus.new(last_token, expression).execute
-    elsif @token == 'equal'
-      Equal.new(last_token, expression).execute
     else
-      expression
+      OPERATIONS.include?(token) ? operation_execute(@token) : expression
     end
+  end
+
+  private
+
+  def operation_execute(class_name)
+    Object.const_get(class_name.capitalize).new(last_token, expression).execute
   end
 end

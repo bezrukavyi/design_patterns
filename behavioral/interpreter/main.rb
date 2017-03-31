@@ -4,6 +4,8 @@ require_relative 'equal'
 require_relative 'parse_symbol'
 require_relative 'parser'
 
-text = '( (10 plus (5 plus 10)) equal (10 plus 15) )'
+first_part = '( 30 plus (5 plus 10) )'
+second_part = '(10 plus 35)'
+text = "( #{first_part} equal #{second_part} )"
 parser = Parser.new(text)
 puts parser.expression
